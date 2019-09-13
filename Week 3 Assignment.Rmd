@@ -1,0 +1,61 @@
+---
+title: "Week 3 Assignment"
+author: "Bryan Kong Chak Bun"
+date: "September 13, 2019"
+output: ioslides_presentation
+---
+
+## Time Serie of Hang Seng Index 
+###Introduction 
+Hang Seng Index (HSI) is a stock market index in Hong Kong showing the market price movement.  This report is going to plot the daily HKI time serie in the period between 13 March and 5 June 2019.
+
+"quantmod" package is used and index data was downloaded from "yahoo" websit.
+
+## R Code
+```{r eval = FALSE}
+library(plotly)
+library(quantmod)
+library(dplyr)
+## set period
+from.dat <- as.Date("03/13/19", format = "%m/%d/%y")
+to.dat <- as.Date("06/06/19", format = "%m/%d/%y")
+## download HSI price data
+suppressWarnings(getSymbols("HSI", src = "yahoo", from = from.dat, 
+                            to = to.dat))
+
+dHSI <- suppressWarnings(to.daily(HSI))
+HSIClose <- Cl(dHSI)
+
+HSIClose <- as.data.frame(HSIClose)
+
+HSIClose <- mutate(HSIClose, time = rownames(HSIClose))
+
+plot_ly(HSIClose, x = ~time, y = ~HSI.Close, type = "area")
+
+```
+
+```{r echo = FALSE}
+library(plotly)
+library(quantmod)
+library(dplyr)
+## set period
+from.dat <- as.Date("03/13/19", format = "%m/%d/%y")
+to.dat <- as.Date("06/06/19", format = "%m/%d/%y")
+## download HSI price data
+suppressWarnings(getSymbols("HSI", src = "yahoo", from = from.dat, 
+                            to = to.dat))
+
+dHSI <- suppressWarnings(to.daily(HSI))
+HSIClose <- Cl(dHSI)
+
+HSIClose <- as.data.frame(HSIClose)
+
+HSIClose <- mutate(HSIClose, time = rownames(HSIClose))
+```
+
+
+##Output Graph
+```{r echo=FALSE}
+plot_ly(HSIClose, x = ~time, y = ~HSI.Close, type = "area")
+
+```
